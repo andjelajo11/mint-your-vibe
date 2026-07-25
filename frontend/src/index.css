@@ -1,0 +1,534 @@
+/* ===== Design tokens =====
+   Palette: near-black warm indigo canvas, so generated art (which sits on
+   its own gradients) never fights the UI around it. Gold ties directly to
+   the "legendary" rarity border already baked into the backend renderer.
+*/
+:root {
+  --bg: #0b0a10;
+  --surface: #15131c;
+  --surface-raised: #1c1926;
+  --border: #2b2735;
+  --text: #f2efea;
+  --text-muted: #948fa0;
+  --text-faint: #625d6d;
+
+  --gold: #c9a227;
+  --teal: #4fc7be;
+
+  --rarity-common: #948fa0;
+  --rarity-uncommon: #4fc7be;
+  --rarity-rare: #6c8cff;
+  --rarity-epic: #b26cff;
+  --rarity-legendary: #c9a227;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* faint grain texture so the flat dark background doesn't feel like a
+   default "dark mode" - a subtle, deliberate choice rather than plain black */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 9999;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--gold);
+  color: #14120c;
+}
+
+/* ===== Layout ===== */
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 72px 24px 120px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eyebrow .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-optical-sizing: auto;
+  font-size: clamp(38px, 6vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin: 0 0 16px;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero p {
+  color: var(--text-muted);
+  font-size: 17px;
+  max-width: 46ch;
+  margin: 0 0 40px;
+}
+
+/* ===== Prompt form ===== */
+
+.prompt-form {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  margin-bottom: 12px;
+}
+
+.prompt-input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  padding: 15px 18px;
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.prompt-input:focus {
+  border-color: var(--gold);
+}
+
+.prompt-input::placeholder {
+  color: var(--text-faint);
+}
+
+.prompt-submit {
+  background: var(--gold);
+  color: #14120c;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 0 24px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.prompt-submit:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.prompt-submit:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.prompt-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.prompt-hint {
+  font-size: 13px;
+  color: var(--text-faint);
+  margin: 0 0 8px;
+}
+
+.error-message {
+  color: #ff8a8a;
+  font-size: 14px;
+  margin: 8px 0 0;
+}
+
+/* ===== Agent process log — the signature element ===== */
+
+.process-log {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-top: 28px;
+}
+
+.process-log-line {
+  display: flex;
+  gap: 12px;
+  padding: 6px 0;
+  color: var(--text-faint);
+  opacity: 0;
+  animation: line-in 0.4s ease forwards;
+}
+
+.process-log-line.done {
+  color: var(--text-muted);
+}
+
+.process-log-line .status {
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.process-log-line.done .status {
+  color: var(--teal);
+}
+
+.process-log-line.active .status {
+  color: var(--gold);
+}
+
+@keyframes line-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--gold);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ===== Result card ===== */
+
+.result {
+  margin-top: 40px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-art {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  background: var(--surface-raised);
+}
+
+.card-body {
+  padding: 24px 26px 26px;
+}
+
+.card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.card-header h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 26px;
+  margin: 0;
+}
+
+.rarity-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card-theme {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0 0 18px;
+}
+
+.card-lore {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--text);
+  margin: 0 0 22px;
+  padding-left: 16px;
+  border-left: 2px solid var(--border);
+}
+
+.trait-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.trait-chip {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+}
+
+.trait-chip .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.trait-chip .value {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn:hover {
+  border-color: var(--text-muted);
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #14120c;
+  border-color: var(--gold);
+}
+
+.btn-primary:hover {
+  border-color: var(--gold);
+  opacity: 0.88;
+}
+
+/* ===== "How I decided this" — collapsible reasoning panel ===== */
+
+.reasoning-toggle {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.reasoning-toggle:hover {
+  color: var(--text-muted);
+}
+
+.reasoning-panel {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-top: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.reasoning-panel .step-label {
+  color: var(--teal);
+  display: block;
+  margin: 12px 0 4px;
+}
+
+.reasoning-panel .step-label:first-child {
+  margin-top: 0;
+}
+
+.hash-row {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hash-row .hash-value {
+  color: var(--text-muted);
+}
+
+/* ===== Gallery ===== */
+
+.gallery {
+  margin-top: 80px;
+}
+
+.gallery-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.gallery-header h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 20px;
+  margin: 0;
+}
+
+.gallery-header span {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.gallery-item {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  cursor: default;
+  position: relative;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-item .gallery-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+  color: var(--text);
+}
+
+.gallery-empty {
+  font-size: 14px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+}
+
+@media (max-width: 520px) {
+  .page {
+    padding: 48px 18px 90px;
+  }
+  .prompt-form {
+    flex-direction: column;
+  }
+  .prompt-submit {
+    padding: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
