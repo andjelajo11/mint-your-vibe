@@ -11,7 +11,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from agent import run_agent
-from art_generator import generate_image, image_to_bytes
+#from art_generator import generate_image, image_to_bytes
+from flow_field_generator import generate_image, image_to_bytes
 
 app = FastAPI(title="Mint Your Vibe")
 
