@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 const EXAMPLES = [
-  "a storm rolling over a neon city",
-  "quiet morning fog on a mountain lake",
-  "static on an old television at 3am",
+  "feeling cozy with a cup of coffee",
+  "ready to conquer the day",
+  "i feel so depressive",
 ];
 
 export default function PromptForm({ onSubmit, isLoading }) {
