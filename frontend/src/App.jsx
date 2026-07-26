@@ -60,14 +60,14 @@ export default function App() {
 
       <div className="hero">
         <h1>
-          Describe a vibe.
+          Describe <em>your</em> current vibe.
           <br />
           Get an <em>artifact</em>.
         </h1>
         <p>
-          A small agent reads what you type, decides on rarity and traits,
+          A small agent reads what you type, decides on rarity and traits, 
           writes it a name and lore — then a deterministic renderer draws it.
-          Same words always draw the same piece.
+          It could be anything, really :) Same words always draw the same piece.
         </p>
       </div>
 
