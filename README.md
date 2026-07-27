@@ -4,8 +4,10 @@ An **AI-native full-stack application** that transforms a user's prompt into a u
 
 Unlike diffusion-based image generation, the artwork is produced through rule-based rendering, making every output **reproducible, explainable, and derived from structured AI decisions**.
 
-<p align="center"> <img src="<img width="1647" height="925" alt="image" src="https://github.com/user-attachments/assets/82d373db-11b9-4625-941c-56523e00dad8" />
-" alt="Mint Your Vibe Demo" width="900"/> </p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/706386fd-bbe9-4928-a66d-5b4f35764e4c" />
+
+</p>
 ---
 
 🚀 Live Demo
