@@ -10,7 +10,7 @@ Unlike diffusion-based image generation, the artwork is produced through rule-ba
 </p>
 ---
 
-🚀 ##Live Demo
+🚀 ## Live Demo
 
 🎥 Video Walkthrough (2 min)
 https://www.loom.com/share/c2869ad52d814ae0b293ad7604b8d066
