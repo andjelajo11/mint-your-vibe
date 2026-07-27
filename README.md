@@ -4,6 +4,8 @@ An **AI-native full-stack application** that transforms a user's prompt into a u
 
 Unlike diffusion-based image generation, the artwork is produced through rule-based rendering, making every output **reproducible, explainable, and derived from structured AI decisions**.
 
+<p align="center"> <img src="<img width="1647" height="925" alt="image" src="https://github.com/user-attachments/assets/82d373db-11b9-4625-941c-56523e00dad8" />
+" alt="Mint Your Vibe Demo" width="900"/> </p>
 ---
 
 🚀 Live Demo
@@ -12,7 +14,7 @@ Unlike diffusion-based image generation, the artwork is produced through rule-ba
 https://www.loom.com/share/c2869ad52d814ae0b293ad7604b8d066
 
 **Live Application:** *(https://mint-your-vibe.vercel.app/)*
-https://www.loom.com/share/c2869ad52d814ae0b293ad7604b8d066
+
 
 ---
 
